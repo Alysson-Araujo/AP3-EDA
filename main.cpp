@@ -1,120 +1,184 @@
-#include <iostream>
 #include "graph.h"
 #include "graphm.h"
 #include <fstream>
+#include <iostream>
+#include <sstream>
 #include <string>
-#include<sstream>
 using namespace std;
-
 
 // Implementacao simples de BFS sem
 // os vetores pai [] e d[]
-void BFS(Graph *G, int start)
-{
-    for (int v = 0; v<G -> n(); ++v)
-        G->setMark(v, 1);
-    G->setMark(start, 2);
-    std ::queue<int> Q;
-    Q.push(start);
-    // vector<bool> visited( G->n() , false); 
 
-    while (!Q.empty())
-    {
+void bfs(Graph *G, int start) {
+
+    for (int i = 0; i < G->getN(); i++) {
+        G->setMark(i, 1);         //todo mundo é branco. Logo, não foram visitados
+        G->setDistancia(i, INFI); //maior inteiro que cabe em um int
+        G->setPai(i, -1);
+    }
+    G->setDistancia(start, 0);
+    G->setCor(start, 1); //primeiro é vermelho
+    queue<int> Q;
+    Q.push(start);
+
+    while (!Q.empty()) {
         int v = Q.front();
         Q.pop();
-        
-        cout << " Vertex " << v << " visited " << endl;
-
-        for (int &w : G->neighbors(v))
-        {
-            
-            if (G->getMark(w) == 1)
-            {
+        //cout << "Vertice " << v << " visitado" << endl;
+        //cout << "cor = " << G->getCor(v) << " pai = " << G->getPai(v) << " distancia = " << G->getDistancia(v) << endl;
+        for (int &w : G->neighbors(v)) {
+            if (G->getMark(w) == 1) {
                 G->setMark(w, 2);
+
+                G->setPai(w, v);
                 Q.push(w);
+
+                if (G->getPai(w) != -1)
+                    G->setDistancia(w, G->getDistancia(G->getPai(w)) + 1);
+
+                if (G->getDistancia(w) % 2 == 0) {
+                    G->setCor(w, 1); //coloca os pares em vermelhor
+                } else {
+                    G->setCor(w, 2); //coloca os impares em preto
+                }
             }
         }
+        //cout << "cor = " << G->getCor(v) << " pai = " << G->getPai(v) << " distancia = " << G->getDistancia(v) << endl;
+
         G->setMark(v, 3);
     }
 }
 
-int main(){
+int main() {
 
     fstream arq;
-     arq.open("testeGrafos.txt", ios::in);
-    
-    int N = 4;
-
-    cout << "insira o numero de vertices\n";
-    //cin >> N;
+    arq.open("testeGrafos.txt", ios::in);
 
     Graph *grafo;
     //grafo = new GraphM(N);
-    //vértice 1 e 2 
+    //vértice 1 e 2
     int v1, v2;
-    int aux = N;
-    
-    
 
-    string linha;
-    
+    string linha, linha2;
+    int tamanho;
+
     /* pega o tamanho do grafo*/
-    getline(arq,linha);
-    int tamanho = std::stoi(linha);
-    cout << tamanho << "\n" <<endl;
+
+    getline(arq, linha);
+    tamanho = std::stoi(linha);
+    //cout << "tamanho é : " << tamanho << endl;
     grafo = new GraphM(tamanho);
-    while( getline(arq, linha)){
-        if(linha == "0" || linha == "0 0") break;
-        std::stringstream s_stream(linha);
-        
-        string substr;
-        getline(s_stream, substr, ' ');
-        v1 = std::stoi(substr);
-        getline(s_stream, substr, ' ');
-        v2 = std::stoi(substr);
-        cout << v1 << " ";
-        cout << v2<< endl;
-        
-        grafo->addEdge(v1, v2);
-        grafo->addEdge(v2, v1);
+    bool falha = false;
+
+    while (tamanho > 0) {
+
+        while (linha[0] != '0' || linha[2] != '0') {
+
+            std::stringstream s_stream(linha);
+
+            string substr;
+            getline(arq, linha);
+
+            v1 = std::stoi(linha);
+
+            
+            int espaco;
+            int aux = 0;
+            for (int i = 0; linha.length() > i; i++) {
+                if (linha[i] == ' ')
+                    espaco = i;
+            }
+
+            linha2[0] = linha[espaco];
+            linha2[1] = linha[espaco+1];
+
+
+
+            v2 = std::stoi(linha2);
+    
+            if (v1 == 0 && v2 == 0)
+                break;
+            
+
+
+            //cout << linha << " ";
+
+            //cout << linha2 << endl;
+
+            grafo->addEdge(v1, v2);
+            grafo->addEdge(v2, v1);
+        }
+
+        bfs(grafo, 0);
+
+        /*
+        int tem_vermelho[tamanho], tem_preto[tamanho]; // vetor de inteiros para guardar a quantidade de vermelhos e pretos em cada camada
         
 
+        for (int i = 0; i < tamanho; i++) {
+            tem_vermelho[i] = 0;
+            tem_preto[i] = 0;
+        }
+
+        for (int i = 0; i < tamanho; i++) {
+            if (grafo->getCor(i) == 1) { // se for vermelho
+                tem_vermelho[grafo->getDistancia(i)]++;
+            } else{ // se for vermelho
+                tem_preto[grafo->getDistancia(i)]++;
+            }
+        }
+
+        for(int i = 0; i < tamanho; i++) {
+            if(tem_vermelho[i] > 0 && tem_preto[i] > 0){
+                teste = false;
+                break;
+            }
+
+        }
+
+        
+*/
+        bool teste = true;
+
+        for(int i = 0; i < tamanho; i++){  //laço testando testando se tem ligação entre vertices da mesma camada 
+            for(int j = 0; j < tamanho; j++){
+                if( i != j && grafo->getDistancia(i) == grafo->getDistancia(j) && grafo->isEdge(i,j)){
+                    teste = false;
+                    break;
+                }
+            }
+        }
+        if(teste == false)
+            cout << "NAO\n";
+        else{
+            cout << "SIM\n";
+            grafo->imprimeCores();
+        }
+
+        getline(arq, linha);
+        tamanho = std::stoi(linha);
+        //cout << "tamanho é : " << tamanho << endl;
+
+        if (tamanho > 0) {
+            grafo->~Graph();
+            grafo = new GraphM(tamanho);
+        }
     }
 
-/*
-    for(int i = 0; i < N-1; ++i) {
-		grafo->addEdge(i, i+1);
-		grafo->addEdge(i+1, i);
-	}
-*/
+    //grafo->correctColoring();
+
+    //grafo->imprimeCores();
     /*
-    grafo->addEdge(0, 1);
-    grafo->addEdge(1, 0);
+    for (int i = 0; i <= grafo->n() - 1; ++i) {
+        cout << "Vizinhos do " << i << ": ";
+        for (int vizinho : grafo->neighbors(i)) {
+            cout << vizinho << " ";
+        }
+        cout << endl;
+    }
+    */
 
-    grafo->addEdge(1, 2);
-    grafo->addEdge(2, 1);
+    grafo->~Graph();
 
-    grafo->addEdge(2, 3);
-    grafo->addEdge(3, 2);
-
-    grafo->addEdge(0, 3);
-    grafo->addEdge(3, 0);
-
-    grafo->addEdge(1, 3);
-    grafo->addEdge(3, 1);
-    
-    grafo->addEdge(0, 2);
-    grafo->addEdge(2, 0);
-*/
-    for(int i = 0; i <= N-1; ++i) {
-		cout << "Vizinhos do " << i << ": ";
-		for( int vizinho : grafo->neighbors(i) ) {
-			cout << vizinho << " ";
-		}
-		cout << endl;
-	}
-
-
-//BFS(grafo,0);
-   return 0;
+    return 0;
 }
