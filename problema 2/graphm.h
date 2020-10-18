@@ -18,8 +18,7 @@ class GraphM : public Graph {
 private:
     int N;
     int M;
-    int *pai;
-    int *distancia;
+    int *filho;
     int **matrix;
     int *mark;
     int *funcionarios;
@@ -45,10 +44,9 @@ public:
         mark = new int[n];
         // Allocate memory for a matrix n x n
         matrix = new int *[n];
-        // Aloca memoria para o vetor pai
-        pai = new int[n];
-        // Aloca memoria para o vetor distancia
-        distancia = new int[n];
+        // Aloca memoria para o vetor Filho
+        filho = new int[n];
+        
         
         funcionarios = new int[n];
 
@@ -72,8 +70,7 @@ public:
 
     // Destructor
     ~GraphM() {
-        delete[] pai;
-        delete[] distancia;
+        delete[] filho;
         delete[] mark;
         for (int i = 0; i < N; i++)
             delete[] matrix[i];
@@ -172,13 +169,9 @@ public:
         checkVertex(v);
         return funcionarios[v];
     }
-    int getPai(int v) {
+    int getFilho(int v) {
         checkVertex(v);
-        return pai[v];
-    }
-    int getDistancia(int v) {
-        checkVertex(v);
-        return distancia[v];
+        return filho[v];
     }
     int getMatrix(int x, int y) {
         checkVertex(x);
@@ -204,14 +197,10 @@ public:
         mark[v] = value;
     }
 
-    void setDistancia(int v, int distancia) {
-        checkVertex(v);
-        this->distancia[v] = distancia;
-    }
 
-    void setPai(int f, int p) {
+    void setFilho(int f, int p) {
         checkVertex(f);
-        this->pai[f] = p;
+        this->filho[f] = p;
     }
     
     void setNome(std::string pessoa, int pos){

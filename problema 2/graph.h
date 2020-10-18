@@ -69,8 +69,7 @@ public:
 
     virtual int getMark(int v) = 0;
     
-    virtual int getPai(int v) = 0;
-    virtual int getDistancia(int v) = 0;
+    virtual int getFilho(int v) = 0;
     virtual int getMatrix(int x, int y) = 0;
     virtual int getN() = 0;
     virtual int getFuncionarios(int v) = 0;
@@ -78,8 +77,7 @@ public:
     
     virtual void setFuncionarios(int v, int x) = 0; 
     virtual void setMark(int v, int value) = 0;
-    virtual void setDistancia(int v, int distancia) = 0;
-    virtual void setPai(int f, int p) = 0; //filho no parametro esquerdo, pai no direito
+    virtual void setFilho(int f, int p) = 0; //filho no parametro esquerdo, pai no direito
     
     virtual void setNome(std::string pessoa, int pos)=0;
     
