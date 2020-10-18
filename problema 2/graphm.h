@@ -4,7 +4,7 @@
 #include <list>
 #include <queue>
 #include <stdexcept>
-
+#include <tuple>
 
 #define INFI 0x3f3f3f3f
 
@@ -24,6 +24,10 @@ private:
     int *mark;
     int *funcionarios;
     string *nomes;
+    bool *convidados;
+    int *chefes;
+
+    
     // Check if a vertex v is valid ( 0 <= v <= N-1 )
     void checkVertex(int v) {
         if (v < 0 || v > N - 1)
@@ -45,13 +49,19 @@ public:
         pai = new int[n];
         // Aloca memoria para o vetor distancia
         distancia = new int[n];
-
+        
         funcionarios = new int[n];
 
         nomes = new string[n];
 
+        convidados = new bool[n];
+
+        chefes = new int[n];
+        chefes[0] = -1;
         for (int i = 0; i <= n - 1; ++i) {
             matrix[i] = new int[n];
+            //por padrao, ninguem esta convidado, logo
+            convidados[i] = false;
         }
         // Initialize matrix with 0's
         for (int i = 0; i <= n - 1; ++i) {
@@ -105,11 +115,15 @@ public:
         if (!isEdge(v1, v2))
             ++M;
         matrix[v1][v2] = wgt;
+        matrix[v2][v1] = wgt;
+    
     }
 
     // Add an edge
     void addEdge(int v1, int v2) {
         setEdgeWeight(v1, v2, 1);
+        //Coloca quem é chefe de quem
+        chefes[v1] = v2;
     }
 
     
@@ -200,5 +214,37 @@ public:
         this->pai[f] = p;
     }
     
+    void setNome(std::string pessoa, int pos){
+        nomes[pos] = pessoa;
+    }
+
+     void imprimeNomes(){
+        for(int i =0; i<N;i++){
+            cout <<nomes[i]<<endl;
+        }
+    }
+/*
+    void getNome(int i){
+        cout << nomes[i] << endl;
+    }
+*/
+    void imprimeChefes() {
+        for (size_t i = 1; i < N; i++)
+        {
+            cout << nomes[chefes[i]] << "->" << nomes[i] << endl;
+        }
+        
+    }
+
+     int getChefes(int i){
+         return chefes[i];
+     }
+     bool getConvidados(int i){
+         return convidados[i];
+     }
+
+    void setConvidados(int i, bool entr){
+        convidados[i] = entr;
+    }
 };
 #endif

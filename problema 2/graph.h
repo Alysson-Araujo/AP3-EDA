@@ -1,7 +1,7 @@
 #ifndef graph_h
 #define graph_h
 #include <iostream>
-
+#include <string>
 #include <list>
 
 class Edge {
@@ -68,7 +68,7 @@ public:
     // val: the value to set
 
     virtual int getMark(int v) = 0;
-    //virtual string getNome(int ID); //Pega o nome do ID
+    
     virtual int getPai(int v) = 0;
     virtual int getDistancia(int v) = 0;
     virtual int getMatrix(int x, int y) = 0;
@@ -81,10 +81,16 @@ public:
     virtual void setDistancia(int v, int distancia) = 0;
     virtual void setPai(int f, int p) = 0; //filho no parametro esquerdo, pai no direito
     
+    virtual void setNome(std::string pessoa, int pos)=0;
     
-    
-  
-    
+    virtual void imprimeNomes() = 0;
+
+    virtual void imprimeChefes() =0;
+
+    virtual int getChefes(int i) = 0;
+    virtual bool getConvidados(int i)=0;
+    virtual void setConvidados(int i, bool entr) = 0;
+    virtual  std::string getNome(int i)=0;
 };
 
 #endif

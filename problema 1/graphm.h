@@ -1,5 +1,5 @@
 #ifndef graphm_h
-#define graphm_h //LEMBRAR DE APAGAR O PAI,MARK e DISTANCIA SE NÃO USAR
+#define graphm_h
 #include "graph.h"
 #include <list>
 #include <queue>
@@ -18,7 +18,6 @@ using namespace std;
  */
 class GraphM : public Graph {
 private:
-    //OLHAR SE FOI USADO O PAI E A DISTANCIA
     int N;
     int M;
     int *pai;
