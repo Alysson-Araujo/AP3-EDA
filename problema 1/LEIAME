@@ -1,0 +1,5 @@
+para executar digite no terminal:
+
+g++ main.cpp -o programa && ./programa
+
+

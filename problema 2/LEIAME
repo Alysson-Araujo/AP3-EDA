@@ -1,0 +1,9 @@
+Problema incompleto
+
+Problema no leitor do .txt
+
+não funciona em alguns casos, por exemplo casos onde no melhor caso tem 2 vertices seguidos que não vão (chefe e funcionario não vão)
+
+Para ver um teste fixo digite no terminal
+
+g++ main.cpp -o programa && ./programa

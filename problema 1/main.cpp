@@ -52,7 +52,7 @@ void bfs(Graph *G, int start) {
 int main() {
 
     fstream arq;
-    arq.open("grafos.txt", ios::in);
+    arq.open("grafos.txt", ios::in);// Abre o Aqruivo onde contém todos os grafos e sua ligacoes
 
     Graph *grafo;
     //grafo = new GraphM(N);
@@ -77,11 +77,11 @@ int main() {
             std::stringstream s_stream(linha);
 
             string substr;
-            getline(s_stream, substr, ' ');
+            getline(s_stream, substr, ' ');// pega o primeiro vertice de entrada (linha->s_stream)
 
-            v1 = std::stoi(substr);
+            v1 = std::stoi(substr);// transforma ele de string para int, o vértice do grafo já que originalmente ele é um numero
 
-            getline(s_stream, substr, ' ');
+            getline(s_stream, substr, ' ');// Pega o segundo vértice da entrada (linha->s_stream)
             v2 = std::stoi(substr);
 
             if (v1 == 0 && v2 == 0)
@@ -90,11 +90,11 @@ int main() {
             //cout << "v1: " << v1 << endl;
             //cout << "v2: " << v2 << endl;
 
-            grafo->addEdge(v1, v2);
-            grafo->addEdge(v2, v1);
+            grafo->addEdge(v1, v2);//Adiciona uma aresta para os vetores passados no parametro da funcao. No caso seria um grafo nao direcionado
+            grafo->addEdge(v2, v1);//Adiciona uma aresta para os vetores passados no parametro da funcao. No caso seria um grafo nao direcionado
         }
 
-        bfs(grafo, 0);
+        bfs(grafo, 0); //percurso bfs
     
         bool teste = true;  //testa se tem irmãos de cor diferente
        
@@ -107,7 +107,7 @@ int main() {
             tem_preto[i] = 0;
         }
 
-        for (int i = 0; i < tamanho-1; i++) {
+        for (int i = 0; i < tamanho-1; i++) { //observa quantas cores tem em cada camada
             if(grafo->getCor(i) == 1){
                 tem_vermelho[grafo->getDistancia(i)]++;
             }
@@ -115,20 +115,8 @@ int main() {
                 tem_preto[grafo->getDistancia(i)]++;
             }
         }
-        /*
-        cout << "tem vermelho ";
-        for (int i = 0; i < tamanho-1; i++){
-            cout <<  tem_vermelho[i];
-        }
-        cout << endl;
-        cout << "tem preto ";
-        for (int i = 0; i < tamanho-1; i++){
-            cout << tem_preto[i];
-        }
-        cout << endl;
-        */
 
-        for(int i = 0; i < tamanho-1; i++) {
+        for(int i = 0; i < tamanho-1; i++) { //percorre todo vetor e se encontrar cor diferente em uma camada seta teste como falso
             if(tem_vermelho[i] > 0 && tem_preto[i] > 0){
                 teste = false;
                 break;
@@ -159,6 +147,7 @@ int main() {
                 }
         }
 
+        // Nessa parte verifica se todos os testes estão corretos. Dizendo que o grafo está na regra das duas cores sem encostar ou não
         if(teste == false || teste2 == false || teste3 == false)
             cout << "NAO\n";
         else{
@@ -168,6 +157,7 @@ int main() {
 
         getline(arq, linha);
         tamanho = std::stoi(linha);
+        
         //cout << "tamanho é : " << tamanho << endl;
 
         if (tamanho > 0) {
@@ -176,18 +166,7 @@ int main() {
         }   
     }
 
-    //grafo->correctColoring();
-
-    //grafo->imprimeCores();
-    /*
-    for (int i = 0; i <= grafo->n() - 1; ++i) {
-        cout << "Vizinhos do " << i << ": ";
-        for (int vizinho : grafo->neighbors(i)) {
-            cout << vizinho << " ";
-        }
-        cout << endl;
-    }
-    */
+    
 
     grafo->~Graph();
 

@@ -1,3 +1,20 @@
+/* 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Aluno: Alysson Alexandre de Oliveira Araújo               |
+Matricula: 474084                                         |
+Turma: Estrutura de dados avançada 2020.1                 |
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+*/
+
+
+/* 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Aluno: Alysson Alexandre de Oliveira Araújo               |
+Matricula: 474084                                         |
+Turma: Estrutura de dados avançada 2020.1                 |
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+*/
+
 #ifndef graph_h
 #define graph_h
 #include <iostream>

@@ -1,10 +1,26 @@
+/* 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Aluno: Alysson Alexandre de Oliveira Araújo               |
+Matricula: 474084                                         |
+Turma: Estrutura de dados avançada 2020.1                 |
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+*/
+/* 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Aluno: Alysson Alexandre de Oliveira Araújo               |
+Matricula: 474084                                         |
+Turma: Estrutura de dados avançada 2020.1                 |
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+*/
+
+
 #ifndef graphm_h
 #define graphm_h 
 #include "graph.h"
 #include <list>
 #include <queue>
 #include <stdexcept>
-#include <tuple>
+
 
 #define INFI 0x3f3f3f3f
 
@@ -25,8 +41,8 @@ private:
     string *nomes;
     bool *convidados;
     int *chefes;
+    int *eh_chefe;
 
-    
     // Check if a vertex v is valid ( 0 <= v <= N-1 )
     void checkVertex(int v) {
         if (v < 0 || v > N - 1)
@@ -55,7 +71,7 @@ public:
         convidados = new bool[n];
 
         chefes = new int[n];
-        chefes[0] = -1;
+        chefes[0] = -1;// dono da empresa não tem chefe
         for (int i = 0; i <= n - 1; ++i) {
             matrix[i] = new int[n];
             //por padrao, ninguem esta convidado, logo
@@ -121,6 +137,7 @@ public:
         setEdgeWeight(v1, v2, 1);
         //Coloca quem é chefe de quem
         chefes[v1] = v2;
+        filho[v2]=v1;
     }
 
     
@@ -235,5 +252,10 @@ public:
     void setConvidados(int i, bool entr){
         convidados[i] = entr;
     }
+
+    int getEhChefe(int i){
+        return eh_chefe[i];//eh chefe de alguém
+    }
+
 };
 #endif

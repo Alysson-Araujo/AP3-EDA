@@ -1,3 +1,17 @@
+
+
+/*      Turma: Estrutura de dados avançada 2020.1   
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Aluno: Alysson Alexandre de Oliveira Araújo               |
+Matricula: 474084                                         |
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Aluno: João Almir da Costa Junior                         |
+Matricula: 470034                                         |
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+*/
+
 #include "graph.h"
 #include "graphm.h"
 #include <cctype>
@@ -28,23 +42,55 @@ void DFS_VISIT(Graph &G, int v, int *temp_Descoberta, int *temp_Finalizacao, int
          << endl;
 
     for (int &i : G.neighbors(v)) {
+/*
+        if(G.getConvidados(G.getChefes(v))==1){
+                G.setConvidados(v,false);
+        }
+        else if(G.getChefes(v)==0){
+            G.setConvidados(v,true);
+        }
 
+
+        if( G.getFilho()==v{
+            G.setConvidados(i, true);
+            G.setConvidados(G.getChefes(v),false);
+        }
+        
+        
         /*if(G.getChefes(v)== G.getFilho(v)){
             cout << "\nCHEFE E FILHO TA IGUAl\n";
             G.setConvidados(v, true);
             G.setConvidados(G.getChefes(v),false);
         }*/
-
+        /*
         if(G.getChefes(i) != -1 && G.getConvidados(G.getChefes(i)) == false){
             G.setConvidados(i, true);
         }
+        */
 
         if (G.getMark(i) == BRANCO) {
 
             DFS_VISIT(G, i, temp_Descoberta, temp_Finalizacao, tempo);
         }
     }
+    
+    if(G.getChefes(v) != -1){
+        if(G.getConvidados(v) == true)
+            G.setConvidados(G.getChefes(v),false);
+        else
+            G.setConvidados(G.getChefes(v),true);
+    }
+    else{
+        if(G.getConvidados(0) == true)
+            for (int i = 0; i < G.n(); i++){
+                if(G.getChefes(i) == 0 && G.getConvidados(i) == true){
+                    G.setConvidados(0,false);
+                    break;
+                }
 
+        }
+    }
+    
     G.setMark(v, PRETO);
     tempo++;
     temp_Finalizacao[v] = tempo;
@@ -77,13 +123,11 @@ void DFS(Graph &G) {
             DFS_VISIT(G, i, temp_Descoberta, temp_Finalizacao, tempo);
     }
 
-    /*for (int &i : G.neighbors(0)) {
-        if (G.getConvidados(i) == false)
-            G.setConvidados(1, true);
-    }*/
+    
 }
 
 int main() {
+
 
     Graph *grafo;
     grafo = new GraphM(11);
@@ -98,9 +142,9 @@ int main() {
     grafo->addEdge(9, 6);
     grafo->addEdge(10, 9);
 
-    DFS(*grafo);
 
-    /* 
+/*
+
     grafo->setNome("Paulo",0);
     grafo->setNome("Jakson",1);
     grafo->setNome("Karina",2);
@@ -109,7 +153,7 @@ int main() {
     grafo->setNome("Carlos",5);
     grafo->setNome("Santiago",6);
     grafo->setNome("Pedro",7);
-    */
+    /*
     
     grafo->setNome("0", 0);
     grafo->setNome("1", 1);
@@ -122,8 +166,31 @@ int main() {
     grafo->setNome("8", 8);
     grafo->setNome("9", 9);
     grafo->setNome("10", 10);
+*/
 
-    grafo->imprimeChefes();
+    
+    bool folha[grafo->n()];
+    for (int i = 0; i < grafo->n(); i++){
+        folha[i] = true;
+    }
+    
+    for (int i = 0; i < grafo->n(); i++){
+        for(int j = 0; j < grafo->n(); j++){
+            if(i != j)
+                if(i == grafo->getChefes(j)){
+                    folha[i] = false;
+                        break;
+                }
+        }
+    }
+
+    for (int i = 0; i < grafo->n(); i++){
+        if(folha[i] == true)
+            grafo->setConvidados(i,true);
+    }
+
+
+    DFS(*grafo);
 
     /*
     
@@ -133,7 +200,7 @@ int main() {
                // 2<-----1
    
     
-    DFS(*grafo);
+    
     //bfs(grafo, 0);
     
     
@@ -150,7 +217,7 @@ int main() {
     grafo->addEdge(3,0);           // 3<-----0
     grafo->addEdge(4,1);           // 4<-----1
     grafo->addEdge(5,3);           // 5<-----3
-    DFS(*grafo);
+    
     //bfs(grafo, 0);
     
     
@@ -179,24 +246,35 @@ int main() {
 
     int cont = 0;
 
-    cout << "convidados: ";
+    
 
-    for (int i = 0; i < grafo->n(); i++) {
-        if (grafo->getConvidados(i) == true) {
-            cout << grafo->getNome(i) << " ";
-            cont++;
-        }
-    }
+  
 
-    cout << "\nnum convidados: " << cont << endl;
-
-    cout << endl;
 
     //grafo->getNome(0,"0");
     //
     //grafo->imprimeChefes();
 
     
+
+    cout << "folha ";
+    for (int i = 0; i < grafo->n(); i++){
+        cout << folha[i] << " ";
+    }
+
+    cout<< endl;
+
+    cout << "convidados: ";
+
+    for (int i = 0; i < grafo->n(); i++) {
+        cout << grafo->getConvidados(i) << " ";
+        if(grafo->getConvidados(i))
+            cont++;
+    }
+    
+    cout<< endl;
+    
+    cout << "maior quantidade possivel de pessoas na festa: " <<cont << endl;
 
     grafo->~Graph();
     // fstream arq;
